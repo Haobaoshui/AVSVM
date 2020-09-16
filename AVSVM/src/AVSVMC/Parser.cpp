@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "Parser.h"
 
 
@@ -117,7 +117,7 @@ Node* Parser::Postfix_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 
 
@@ -169,7 +169,7 @@ Node* Parser::Unary_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 	
 
@@ -218,7 +218,7 @@ Node* Parser::Multiplicative_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 	NodeValue vLeft;
 	NodeValue vRight;
@@ -299,7 +299,7 @@ Node* Parser::Additive_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 	NodeValue vLeft;
 	NodeValue vRight;
@@ -371,7 +371,7 @@ Node* Parser::Relational_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 	bool r = false;
 
@@ -379,8 +379,8 @@ Node* Parser::Relational_Expression(NodeValue &result)
 
 	while (m_nToken == '>'
 		|| m_nToken == '<'
-		|| m_nToken == Token_Op_LessorEqual
-		|| m_nToken == Token_Op_GreatorEqual)
+		|| m_nToken == Token_Op_LessOrEqual	//<=
+		|| m_nToken == Token_Op_GreatOrEqual)	//>=
 	{
 
 
@@ -420,7 +420,7 @@ Node* Parser::Equality_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 	
 
@@ -464,7 +464,7 @@ Node* Parser::Logical_And_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 
 
@@ -505,7 +505,7 @@ Node* Parser::Logical_Or_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 	
 
@@ -546,7 +546,7 @@ Node* Parser::Condition_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 	
 
@@ -584,7 +584,7 @@ Node* Parser::Assignment_Expression(NodeValue &result)
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 	
 	pNodeResult = Condition_Expression(result);
@@ -633,7 +633,7 @@ Node* Parser::Expression( NodeValue &result )
 	Node *pNodeRight = NULL;
 
 	if (IsTokenEnd())
-		return false;
+		return nullptr;
 
 
 	int nCount = 0;

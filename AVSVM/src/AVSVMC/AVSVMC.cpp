@@ -1,43 +1,10 @@
-/*******************************************************************************
-Ä£¿éÃû		: AVSVM±àÒëÆ÷
-ÎÄ¼şÃû		: calc.c
-ÎÄ¼şÊµÏÖ¹¦ÄÜ	: ÑİÊ¾º¯Êı
-×÷Õß			: ºÂ±£Ë®
-ÁªÏµ·½Ê½		:hbs@bistu.edu.cn
-°æ±¾			: 1.0
+ï»¿// AVSVMC.cpp : æ­¤æ–‡ä»¶åŒ…å« "main" å‡½æ•°ã€‚ç¨‹åºæ‰§è¡Œå°†åœ¨æ­¤å¤„å¼€å§‹å¹¶ç»“æŸã€‚
+//
 
---------------------------------------------------------------------------------
-ĞŞ¸Ä¼ÇÂ¼ :
-ÈÕ ÆÚ        °æ±¾     ĞŞ¸ÄÈË              ĞŞ¸ÄÄÚÈİ
-2014.11.20   1.0     hbs               ´´½¨ÎÄ¼ş
+#include <iostream>
 
-*******************************************************************************/
-
-#include "stdafx.h"
-
-#include "Parser.h"
-using namespace AVSVM_Compiler;
-
-
-/*
-±àÒëÆ÷ÓÃ·¨£º
-avsvmc options files
-*/
-int _tmain(int argc, _TCHAR* argv[])
+int main()
 {
-	if ( argc < 2 )
-		return 1;
-
-	for (int i = 1; i < argc; i++)
-	{
-		Parser parser;
-		wstring s = argv[i];
-		wstring d = s;
-		parser.Parse(s, d);
-
-	}
-
-	return 0;
+    std::cout << "Hello World!\n";
 }
-
 

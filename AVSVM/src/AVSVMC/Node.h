@@ -6,11 +6,6 @@
 namespace AVSVM_Compiler
 {
 	
-
-	
-
-	
-
 	class Node
 	{
 	public:

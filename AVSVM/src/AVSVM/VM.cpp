@@ -415,7 +415,7 @@ void VM::DumpBin( )
 
 
 		//Í£»ú
-		case NOP:			//
+		case NOP:			//ÎÞ²Ù×÷
 			i++;
 			DumpPrint( _T( "NOP" ) );
 			i++;

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "ParseTree.h"
 
 using namespace AVSVM_Compiler;

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "Error.h"
 using namespace AVSVM_Compiler;
 

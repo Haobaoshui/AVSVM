@@ -45,7 +45,7 @@ namespace AVSVM_Compiler
 			nValue = n;
 		}
 
-		void Set( TCHAR c )
+		void Set(wchar_t c )
 		{
 			Reset( );
 			nTokenValueType = TokenValueType_Char;
@@ -59,7 +59,7 @@ namespace AVSVM_Compiler
 			dValue = d;
 		}
 
-		void Set( const TCHAR *s )
+		void Set( const wchar_t*s )
 		{
 			Reset( );
 			nTokenValueType = TokenValueType_String;
@@ -84,7 +84,7 @@ namespace AVSVM_Compiler
 		union
 		{
 			int nValue;
-			TCHAR cValue;
+			wchar_t cValue;
 			double dValue;
 			wstring *pstr;
 		};

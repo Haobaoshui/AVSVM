@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "Lex.h"
 
 using namespace AVSVM_Compiler;
@@ -225,7 +225,7 @@ Token Lex::GetNextToken( )
 			{
 				MoveToNextChar( );
 				IncCol( );
-				return Token_Op_GreatorEqual;
+				return Token_Op_GreatOrEqual;
 			}
 			return '>';
 
@@ -237,7 +237,7 @@ Token Lex::GetNextToken( )
 			{
 				MoveToNextChar( );
 				IncCol( );
-				return Token_Op_LessorEqual;
+				return Token_Op_LessOrEqual;
 			}
 			return '<';
 
@@ -289,12 +289,12 @@ bool Lex::ParseNumber( )
 {
 	ResetTokenValue( );
 
-	TCHAR buf[ 1024 ];
+	wchar_t  buf[ 1024 ];
 	bool bFlagPoint = ( '.' == GetChar( ) ? true : false );
 
 	
 
-	TCHAR *p = buf;
+	wchar_t*p = buf;
 	for ( ;; )
 	{
 		*p++ = GetChar( );
@@ -320,9 +320,9 @@ bool Lex::ParseNumber( )
 bool Lex::ParseChar( )
 {
 	ResetTokenValue( );
-	TCHAR buf[ 1024 ];
+	wchar_t   buf[ 1024 ];
 
-	TCHAR *p = buf;
+	wchar_t*p = buf;
 	for ( ; GetChar( )!='\''; )
 	{
 		*p++ = GetChar( );
@@ -341,9 +341,9 @@ bool Lex::ParseChar( )
 bool Lex::ParseString( )
 {
 	ResetTokenValue( );
-	TCHAR buf[ 1024 ];
+	wchar_t  buf[ 1024 ];
 
-	TCHAR *p = buf;
+	wchar_t*p = buf;
 	for ( ; GetChar( ) != '"'; )
 	{
 		*p++ = GetChar( );
@@ -358,13 +358,13 @@ bool Lex::ParseString( )
 	return true;
 }
 
-bool Lex::EscapeCharacter( const TCHAR *p )
+bool Lex::EscapeCharacter( const wchar_t*p )
 {
 	if ( NULL == p )
 		return  false;
 
-	TCHAR buf[ MAX_ID_LENGTH ];
-	TCHAR *d = buf;
+	wchar_t  buf[ MAX_ID_LENGTH ];
+	wchar_t*d = buf;
 	while ( *p )
 	{
 		if ( *p++ == '\\' )
@@ -397,7 +397,7 @@ int Lex::ParserID( )
 	ResetTokenValue( );
 
 
-	TCHAR buf[ MAX_ID_LENGTH ];
+	wchar_t  buf[ MAX_ID_LENGTH ];
 	int i = 0;
 	do
 	{
@@ -412,7 +412,7 @@ int Lex::ParserID( )
 
 
 
-int Lex::GetTokenByString( const TCHAR *p )
+int Lex::GetTokenByString( const wchar_t*p )
 {
 	if ( NULL == p )
 		return Token_Unknown;

@@ -1,3 +1,6 @@
+/*
+* ·ûºÅ±í¹ÜÀí
+*/
 #pragma once
 #include <vector>
 using namespace std;
@@ -28,6 +31,7 @@ namespace AVSVM_Compiler
 
 
 	const size_t SYMTAB_HASH_BUCKET_SIZE = 100;
+
 	class SymbolTableManager
 	{
 	public:

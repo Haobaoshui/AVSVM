@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "Node.h"
 
 using namespace AVSVM_Compiler;

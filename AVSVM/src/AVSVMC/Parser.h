@@ -1,3 +1,6 @@
+/*
+* Óï·¨½âÎöÆ÷
+*/
 #pragma once
 
 #include "Lex.h"

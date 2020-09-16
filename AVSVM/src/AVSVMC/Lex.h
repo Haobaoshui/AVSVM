@@ -1,4 +1,11 @@
+/*
+* 词法分析
+*/
 #pragma once
+#include <iostream>
+#include <string>
+
+using namespace std;
 
 #include "TokenValue.h"
 
@@ -19,71 +26,72 @@ namespace AVSVM_Compiler
 
 
 	//自增, 自减
-	const Token	Token_Op_Inc = TokenBegin + 50;		//自增
-	const Token	Token_Op_Deinc = TokenBegin + 60;		//自减
+	const Token	Token_Op_Inc = TokenBegin + 1000;			//自增
+	const Token	Token_Op_Deinc = TokenBegin + 1010;		//自减
 
 
 	//逻辑运算符
-	const Token	Token_Op_And = TokenBegin + 70;		//与
-	const Token	Token_Op_Or = TokenBegin + 80;			//或
+	const Token	Token_Op_And = TokenBegin + 2000;			//与
+	const Token	Token_Op_Or = TokenBegin + 2010;			//或
 
 	//复合赋值运算符
-	const Token	Token_Op_AddAssignment = TokenBegin + 90;			//-=
-	const Token	Token_Op_SubAssignment = TokenBegin + 100;			//+=
-	const Token	Token_Op_MulAssignment = TokenBegin + 110;			//*=
-	const Token	Token_Op_DivAssignment = TokenBegin + 120;			///=
-	const Token	Token_Op_ModAssignment = TokenBegin + 130;			//%=
+	const Token	Token_Op_AddAssignment = TokenBegin + 3000;		//-=
+	const Token	Token_Op_SubAssignment = TokenBegin + 3010;		//+=
+	const Token	Token_Op_MulAssignment = TokenBegin + 3020;		//*=
+	const Token	Token_Op_DivAssignment = TokenBegin + 3030;		///=
+	const Token	Token_Op_ModAssignment = TokenBegin + 3040;		//%=
 
 	//关系运算符,包括等于(==)、不等于(!=)、小于(<)、小于等于(<=)、大于(>)、大于等于(>=)等几种
-	const Token	Token_Op_Equal = TokenBegin + 140;		//等于
-	const Token	Token_Op_NotEqual = TokenBegin + 150;		//不等于
-	const Token	Token_Op_LessorEqual = TokenBegin + 160;		//小于等于
-	const Token	Token_Op_GreatorEqual = TokenBegin + 170;		//大于等于
+	const Token	Token_Op_Equal = TokenBegin + 4000;				//==
+	const Token	Token_Op_NotEqual = TokenBegin + 4010;			//!=
+	const Token	Token_Op_LessOrEqual = TokenBegin + 4020;		//<=
+	const Token	Token_Op_GreatOrEqual = TokenBegin + 4030;		//>=
 
+
+	//数据类型关键字
+	const Token	Token_type_int = TokenBegin + 5000;				//int
+	const Token	Token_type_float = TokenBegin + 5010;			//float
+	const Token	Token_type_char = TokenBegin + 5020;				//char
+	const Token	Token_type_string = TokenBegin + 5030;			//string
 
 	//关键字
-	const Token	Token_type_int = TokenBegin + 180;
-	const Token	Token_type_float = TokenBegin + 190;
-	const Token	Token_type_char = TokenBegin + 200;
-	const Token	Token_type_string = TokenBegin + 210;
+	const Token	Token_if = TokenBegin + 6000;					//if
+	const Token	Token_else = TokenBegin + 6010;					//else
+	const Token	Token_switch = TokenBegin + 6020;				//switch
+	const Token	Token_case = TokenBegin + 6030;					//case
+	const Token	Token_default = TokenBegin + 6040;				//default
+	const Token	Token_continue = TokenBegin + 6050;				//continue
+	const Token	Token_break = TokenBegin + 6060;					//break
+	const Token	Token_while = TokenBegin + 6070;					//while
+	const Token	Token_for = TokenBegin + 6080;					//for
+	const Token	Token_foreach = TokenBegin + 6090;				//foreach
 
-	const Token	Token_if = TokenBegin + 220;
-	const Token	Token_else = TokenBegin + 230;
-	const Token	Token_switch = TokenBegin + 240;
-	const Token	Token_case = TokenBegin + 250;
-	const Token	Token_default = TokenBegin + 260;
-	const Token	Token_continue = TokenBegin + 270;
-	const Token	Token_break = TokenBegin + 280;
-	const Token	Token_while = TokenBegin + 290;
-	const Token	Token_for = TokenBegin + 300;
-	const Token	Token_foreach = TokenBegin + 310;
-
-	const Token	Token_Unknown = TokenBegin + 320;
+	const Token	Token_Unknown = TokenBegin + 10000;
 
 
 	//关键字字符串
-	const TCHAR * const cst_KeyWord_int = _T("int");
-	const TCHAR * const cst_KeyWord_float = _T("float");
-	const TCHAR * const cst_KeyWord_char = _T("char");
-	const TCHAR * const cst_KeyWord_string = _T("string");
+	const wchar_t* const cst_KeyWord_int = L"int";
+	const wchar_t* const cst_KeyWord_float = L"float";
+	const wchar_t* const cst_KeyWord_char = L"char";
+	const wchar_t* const cst_KeyWord_string = L"string";
 
-	const TCHAR * const cst_KeyWord_if = _T("if");
-	const TCHAR * const cst_KeyWord_else = _T("else");
-	const TCHAR * const cst_KeyWord_switch = _T("switch");
-	const TCHAR * const cst_KeyWord_case = _T("case");
-	const TCHAR * const cst_KeyWord_default = _T("default");
-	const TCHAR * const cst_KeyWord_continue = _T("continue");
-	const TCHAR * const cst_KeyWord_break = _T("break");
-	const TCHAR * const cst_KeyWord_while = _T("while");
-	const TCHAR * const cst_KeyWord_for = _T("for");
-	const TCHAR * const cst_KeyWord_foreach = _T("foreach");
+	const wchar_t* const cst_KeyWord_if = L"if";
+	const wchar_t* const cst_KeyWord_else = L"else";
+	const wchar_t* const cst_KeyWord_switch = L"switch";
+	const wchar_t* const cst_KeyWord_case = L"case";
+	const wchar_t* const cst_KeyWord_default = L"default";
+	const wchar_t* const cst_KeyWord_continue = L"continue";
+	const wchar_t* const cst_KeyWord_break = L"break";
+	const wchar_t* const cst_KeyWord_while = L"while";
+	const wchar_t* const cst_KeyWord_for = L"for";
+	const wchar_t* const cst_KeyWord_foreach = L"foreach";
 
 
 	const unsigned int MAX_ID_LENGTH = 1024;
 
 	struct KeyWord
 	{
-		const TCHAR *pKeyWord;
+		const wchar_t*pKeyWord;
 		int nToken;
 	};
 
@@ -118,9 +126,9 @@ namespace AVSVM_Compiler
 		~Lex();
 
 	public:
-		inline bool SetProgram(const TCHAR *pstr);
+		inline bool SetProgram(const wchar_t*pstr);
 	protected:
-		const TCHAR *m_pstrProgram;
+		const wchar_t*m_pstrProgram;
 
 	public:
 		Token GetNextToken();
@@ -134,16 +142,16 @@ namespace AVSVM_Compiler
 		inline bool IsParseStringEnd();
 		inline void MoveToNextChar();
 		inline void SkipSpace();
-		inline TCHAR GetChar();
-		inline TCHAR GetNextChar();
+		inline wchar_t GetChar();
+		inline wchar_t GetNextChar();
 		int ParserID();
 		bool ParseString();
 		bool ParseChar();
-		bool EscapeCharacter(const TCHAR *p);
+		bool EscapeCharacter(const wchar_t*p);
 		bool ParseNumber();
-		inline bool IsID(TCHAR c);
-		inline bool IsNum(TCHAR c);
-		int GetTokenByString(const TCHAR *p);
+		inline bool IsID(wchar_t c);
+		inline bool IsNum(wchar_t c);
+		int GetTokenByString(const wchar_t*p);
 
 	protected:
 		inline void IncCol();
@@ -155,7 +163,7 @@ namespace AVSVM_Compiler
 		int m_nCurrentCol;
 	};
 
-	bool Lex::SetProgram(const TCHAR *pstr)
+	bool Lex::SetProgram(const wchar_t*pstr)
 	{
 		m_pstrProgram = pstr;
 		return NULL != pstr && NULL != *pstr;
@@ -183,7 +191,7 @@ namespace AVSVM_Compiler
 
 
 	//得到当前字符
-	TCHAR Lex::GetChar()
+	wchar_t Lex::GetChar()
 	{
 		if (m_pstrProgram)
 			return *m_pstrProgram;
@@ -191,19 +199,19 @@ namespace AVSVM_Compiler
 	}
 
 	//得到下一个字符
-	inline TCHAR Lex::GetNextChar()
+	inline wchar_t Lex::GetNextChar()
 	{
 		if (m_pstrProgram && *m_pstrProgram)
 			return *(m_pstrProgram + 1);
 		return 0;
 	}
 
-	bool Lex::IsID(TCHAR c)
+	bool Lex::IsID(wchar_t c)
 	{
-		return (c >= 'a' && c <= 'z') || (c >= 'a' && c <= 'z') || c == '_';
+		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
 	}
 
-	bool Lex::IsNum(TCHAR c)
+	bool Lex::IsNum(wchar_t c)
 	{
 		return  c >= '0' && c <= '9';
 	}
@@ -219,6 +227,10 @@ namespace AVSVM_Compiler
 			return true;
 		return false;
 	}
+
+	/*
+	* 跳过空格
+	*/
 	inline void Lex::SkipSpace()
 	{
 		while (m_pstrProgram && *m_pstrProgram == ' ')
