@@ -3,46 +3,46 @@ namespace AVSVM_ISA
 {
 	typedef unsigned char INSTRUCTIONS;
 
-	//指令
-	const INSTRUCTIONS LOCALLOAD = 0;		//加载局部变量0
-	const INSTRUCTIONS LOCALLOAD0 = 1;		//加载局部变量1
-	const INSTRUCTIONS LOCALLOAD1 = 2;		//加载局部变量2
+	const INSTRUCTIONS NOP = 0;				//无操作
 
-	const INSTRUCTIONS LOCALSTORE = 3;		//保存到局部变量0
-	const INSTRUCTIONS LOCALSTORE0 = 4;		//保存到局部变量1
-	const INSTRUCTIONS LOCALSTORE1 = 5;		//保存到局部变量2
+	//加载局部变量
+	const INSTRUCTIONS LOCALLOAD = 1;		//加载局部变量,后跟局部变量索引
+	const INSTRUCTIONS LOCALLOAD0 = 2;		//加载局部变量0
+	const INSTRUCTIONS LOCALLOAD1 = 3;		//加载局部变量1
 
-	const INSTRUCTIONS GLOBALLOAD = 6;		//全局/静态变量
-	const INSTRUCTIONS GLOBALSTORE = 7;		//全局静态变量
+	//保存到局部变量
+	const INSTRUCTIONS LOCALSTORE = 4;		//保存到局部变量,后跟局部变量索引
+	const INSTRUCTIONS LOCALSTORE0 = 5;		//保存到局部变量0
+	const INSTRUCTIONS LOCALSTORE1 = 6;		//保存到局部变量1
+
+	//全局变量加载与保存
+	const INSTRUCTIONS GLOBALLOAD = 7;		//全局/静态变量
+	const INSTRUCTIONS GLOBALSTORE = 8;		//全局静态变量
 
 	//栈操作
-	const INSTRUCTIONS PUSH = 8;			//压栈
-	const INSTRUCTIONS POP = 9;				//弹栈
-	const INSTRUCTIONS DUP = 10;			//复制栈顶
-	const INSTRUCTIONS SWAP = 11;			//交换栈顶和次栈顶
+	const INSTRUCTIONS PUSH = 9;			//压栈
+	const INSTRUCTIONS POP = 10;				//弹栈
+	const INSTRUCTIONS DUP = 11;			//复制栈顶
+	const INSTRUCTIONS SWAP = 12;			//交换栈顶和次栈顶
 
-	const INSTRUCTIONS INTADD = 12;			//整数加
-	const INSTRUCTIONS INTSUB = 13;			//整数减
-	const INSTRUCTIONS INTMUL = 14;			//整数乘
-	const INSTRUCTIONS INTDIV = 15;			//整数除
-	const INSTRUCTIONS INTMOD = 16;			//整数模
-
-	const INSTRUCTIONS FLOATADD = 17;		//浮点数加
-	const INSTRUCTIONS FLOATSUB = 18;		//浮点数减
-	const INSTRUCTIONS FLOATMUL = 19;		//浮点数乘
-	const INSTRUCTIONS FLOATDIV = 20;		//浮点数除
+	const INSTRUCTIONS ADD = 13;			//整数加
+	const INSTRUCTIONS SUB = 14;			//整数减
+	const INSTRUCTIONS MUL = 15;			//整数乘
+	const INSTRUCTIONS DIV = 16;			//整数除
+	const INSTRUCTIONS MOD = 17;			//整数模
+		
 
 	//条件分支指令
-	const INSTRUCTIONS IFEQ = 21;			//如果相等
-	const INSTRUCTIONS IFNE = 22;			//如果不等
+	const INSTRUCTIONS IFEQ = 18;			//如果相等
+	const INSTRUCTIONS IFNE = 19;			//如果不等
 
 
 	//对象
-	const INSTRUCTIONS NEW = 23;			//新建对象
+	const INSTRUCTIONS NEW = 20;			//新建对象
 
 	//函数调用
-	const INSTRUCTIONS RETURN = 24;			//函数返回
-	const INSTRUCTIONS CALL = 25;			//函数调用
+	const INSTRUCTIONS RETURN = 21;			//函数返回
+	const INSTRUCTIONS CALL = 22;			//函数调用
 
 	/*
 	系统函数调用，例如sin,cos,...
@@ -51,10 +51,10 @@ namespace AVSVM_ISA
 	SYSCALL nType(4bytes)
 	注意：函数参数在SYSCALL指令前面
 	*/
-	const INSTRUCTIONS SYS_CALL = 26;		//系统调用
+	const INSTRUCTIONS SYS_CALL = 23;		//系统调用
 
-	const INSTRUCTIONS NOP = 27;			//无操作
-	const INSTRUCTIONS HALT = 28;			//停机
+	
+	const INSTRUCTIONS HALT = 24;			//停机
 
 
 	//系统调用

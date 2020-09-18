@@ -18,30 +18,21 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="VM.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="VMError.h">
+    <ClInclude Include="VMStack.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="AVSVM.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="VM.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="VMError.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

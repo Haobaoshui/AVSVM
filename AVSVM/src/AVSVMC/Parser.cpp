@@ -476,11 +476,6 @@ Node* Parser::Logical_And_Expression(NodeValue &result)
 	{
 
 
-
-
-
-
-
 		m_nToken = m_lex.GetNextToken();
 
 

@@ -46,3 +46,9 @@ Temporary Items
 .db
 .ipch
 .obj
+.log
+.pdb
+ipch/
+debug/
+release/
+
