@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ClassFile\ClassFile.cpp" />
     <ClCompile Include="AVSVMC.cpp" />
     <ClCompile Include="CompilerOptions.cpp" />
     <ClCompile Include="Error.cpp" />
@@ -152,6 +153,8 @@
     <ClCompile Include="TokenValue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ClassFile\ClassFile.h" />
+    <ClInclude Include="..\ISA\instructions.h" />
     <ClInclude Include="CompilerOptions.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="Lex.h" />

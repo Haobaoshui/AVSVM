@@ -17,18 +17,21 @@ using namespace AVSVM_VM;
 VM::VM()
 {
 	m_nCSLength = 0;
-	CS = NULL;
+	CS = nullptr;
 
 	m_nDSLength = 0;
-	DS = NULL;
+	DS = nullptr;
 
-	m_nStackLength = 0;
-	stack = NULL;
+	m_nSSLength = 0;
+	SS = nullptr;
+	
 
 	m_nGenCSIndex = 0;
 	m_nGenDSIndex = 0;
 
 	m_bResult = false;
+
+	InitVM();
 }
 
 VM::~VM()
@@ -39,8 +42,8 @@ VM::~VM()
 	if (DS)
 		free(DS);
 
-	if (stack)
-		free(stack);
+	if (SS)
+		free(SS);
 }
 
 
@@ -48,9 +51,6 @@ VM::~VM()
 //释放
 int VM::DeleteVM()
 {
-
-
-
 
 	return VM_SUCCESS;
 }
@@ -67,16 +67,19 @@ int VM::InitVM()
 
 void VM::malloc_CS(int new_size)
 {
-	unsigned long size = m_nCSLength;
+	if (new_size < m_nCSLength)return;
+
+	unsigned long size = m_nDSLength;
 	if (size == 0)
 		size = 1;
+
 	while (size < new_size)
 		size = size * 2;
 
 	if (NULL == CS)
-		CS = (char*)malloc(size);
+		CS = (unsigned char*)malloc(sizeof(char) * size);
 	else
-		CS = (char*)realloc(CS, size);
+		CS = (unsigned char*)realloc(CS, sizeof(char) * size);
 
 	m_nCSLength = size;
 }
@@ -87,6 +90,8 @@ new_size:DS大小（每个元素大小为sizeof(double)），注意该大小并不是实际内存大小
 */
 void VM::malloc_DS(int new_size)
 {
+	if (new_size < m_nDSLength)return;
+
 	unsigned long size = m_nDSLength;
 	if (size == 0)
 		size = 1;
@@ -95,20 +100,18 @@ void VM::malloc_DS(int new_size)
 		size = size * 2;
 
 	if (NULL == CS)
-		DS = (double*)malloc(sizeof(double) * size);
+		DS = (unsigned char*)malloc(sizeof(char) * size);
 	else
-		DS = (double*)realloc(stack, sizeof(double) * size);
+		DS = (unsigned char*)realloc(DS, sizeof(char) * size);
 
 	m_nDSLength = size;
 }
 
-
-/*
-new_size:栈大小（每个元素大小为sizeof(double)），注意该大小并不是实际内存大小
-*/
-void VM::malloc_stack(int new_size)
+void AVSVM_VM::VM::malloc_SS(int new_size)
 {
-	unsigned long size = m_nStackLength;
+	if (new_size < m_nSSLength)return;
+
+	unsigned long size = m_nSSLength;
 	if (size == 0)
 		size = 1;
 
@@ -116,12 +119,15 @@ void VM::malloc_stack(int new_size)
 		size = size * 2;
 
 	if (NULL == CS)
-		stack = (double*)malloc(sizeof(double) * size);
+		SS = (unsigned char*)malloc(sizeof(char) * size);
 	else
-		stack = (double*)realloc(stack, sizeof(double) * size);
+		SS = (unsigned char*)realloc(SS, sizeof(char) * size);
 
-	m_nStackLength = size;
+	m_nSSLength = size;
 }
+
+
+
 
 void VM::Gen_OP(INSTRUCTIONS op)
 {
@@ -156,6 +162,14 @@ void VM::Gen_OP(INSTRUCTIONS op, double f)
 	*(CS + m_nGenCSIndex) = f;
 	m_nGenCSIndex += sizeof(double);
 
+}
+bool AVSVM_VM::VM::Validator(const wstring pstrBytecodesFileName)
+{
+	return false;
+}
+bool AVSVM_VM::VM::Validator()
+{
+	return false;
 }
 void VM::SetVar(double f, int nIndex)
 {
@@ -220,42 +234,50 @@ int VM::Run()
 		switch (op)
 		{
 		case  NOP:				//无操作
-			runNOP();
+			PC++;
 			break;
 
-			
-		case  LOCALLOAD:		//加载局部变量0
+			//加载整数类型的局部变量到栈顶
+		case  LOCAL_INT_LOAD:		//加载局部变量至栈顶,后跟局部变量索引
 			PC++;
 
 			//得到索引
 			nParameter = GetParameterIntFromCS(PC);
-			dParameter = GetParameterFloatFromDS(nParameter);
-			PC += sizeof(int);
+		//	dParameter = GetParameterFloatFromDS(nParameter);
+			PC += PARAMETER_SIZE;//参数为4个字节
 
-			if (m_nStackLength < SP + 1)
-				malloc_stack(SP + 1);
+			
+			malloc_SS(BP+SP);
 			stack[SP] = dParameter;
 			SP++;
 			break;
-		case  LOCALLOAD0:		//加载局部变量1
+		case  LOCAL_INT_LOAD_0:		//加载局部变量1
 			break;
-		case  LOCALLOAD1:		//加载局部变量2
-			break;
-
-		case  LOCALSTORE:		//保存到局部变量0
-			break;
-		case  LOCALSTORE0:		//保存到局部变量1
-			break;
-		case  LOCALSTORE1:		//保存到局部变量2
+		case  LOCAL_INT_LOAD_1:		//加载局部变量2
 			break;
 
-			case GLOBALLOAD :		//全局/静态变量
-				break;
-			case  GLOBALSTORE:		//全局静态变量
-				break;
+
+
+			//将整数类型的栈顶值保存到局部变量
+			case LOCAL_INT_STORE:break;	//保存到局部变量,后跟局部变量索引
+			case LOCAL_INT_STORE_0:break;	//保存到局部变量0至栈顶
+			case LOCAL_INT_STORE_1:break;	//保存到局部变量1至栈顶
+
+			//将浮点数类型的栈顶值保存到局部变量
+			case LOCAL_FLOAT_STORE:break;	//保存到局部变量,后跟局部变量索引
+			case LOCAL_FLOAT_STORE_0:break;	//将栈顶值保存到局部变量0
+			case LOCAL_FLOAT_STORE_1:break;	//将栈顶值保存到局部变量1
+
+			//将整数类型的全局变量加载到栈顶或相反
+			case LOAD_INT:break;	//全局/静态变量
+			case STORE_INT:break;	//将栈顶值保存到全局静态变量
+
+			//将浮点数类型的全局变量加载到栈顶或相反
+			case LOAD_FLOAT:break;	//全局/静态变量
+			case STORE_FLOAT:break;	//将栈顶值保存到全局静态变量
 
 				//栈操作
-			case  PUSH:		//压栈
+			case  PUSH_INT:		//压栈
 				PC++;
 				dParameter = GetParameterFloatFromCS(PC);
 				PC += sizeof(double);
@@ -266,11 +288,16 @@ int VM::Run()
 				SP++;				
 				break;
 
-			case  POP:				//弹栈
+			case  POP_INT:				//弹栈
 				PC++;
 				if (SP >= 0)
 					SP--;
 				break;
+
+
+			case PUSH_FLOAT:break;	//将浮点压栈，后跟4字节整数参数
+			case POP_FLOAT:break;	//将栈顶的浮点值弹栈
+
 			case  DUP:		//复制栈顶
 				PC++;
 				if (SP >= 0)
@@ -292,7 +319,7 @@ int VM::Run()
 				}
 				break;
 
-			case  ADD:		//整数加
+			case  INT_ADD:		//整数加
 				PC++;
 				if (SP >= 1)
 				{
@@ -300,7 +327,7 @@ int VM::Run()
 					SP--;
 				}
 				break;
-			case  SUB:			//整数减
+			case  INT_SUB:			//整数减
 				PC++;
 				if (SP >= 1)
 				{
@@ -309,7 +336,7 @@ int VM::Run()
 					SP--;
 				}
 				break;
-			case  MUL:		//整数乘
+			case  INT_MUL:		//整数乘
 				PC++;
 				if (SP >= 1)
 				{
@@ -318,7 +345,7 @@ int VM::Run()
 					SP--;
 				}
 				break;
-			case  DIV:			//整数除
+			case  INT_DIV:			//整数除
 				PC++;
 				if (SP >= 1)
 				{
@@ -327,8 +354,13 @@ int VM::Run()
 					SP--;
 				}
 				break;
-			case  MOD:			//整数模
+			case  INT_MOD:			//整数模
 				break;
+
+			case FLOAT_ADD:break;	//浮点数加
+			case FLOAT_SUB:break;	//浮点数减
+			case FLOAT_MUL:break;	//浮点数乘
+			case FLOAT_DIV:break;;	//浮点数除
 
 		
 
@@ -548,132 +580,6 @@ engine_error_failed:
 	return VM_E_RESULT_STACK;
 }
 
-int AVSVM_VM::VM::runNOP()
-{
-	PC++;
-	return 0;
-}
-
-int AVSVM_VM::VM::RunLOCALLOAD()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunLOCALLOAD0()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunLOCALLOAD1()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunLOCALSTORE()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunLOCALSTORE0()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunLOCALSTORE1()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunGLOBALLOAD()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunGLOBALSTORE()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunPUSH()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunPOP()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunDUP()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunSWAP()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunADD()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunSUB()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunMUL()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunDIV()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunMOD()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunIFEQ()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunIFNE()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunNEW()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunRETURN()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunCALL()
-{
-	return 0;
-}
-
-
-int AVSVM_VM::VM::RunSYS_CALL()
-{
-	return 0;
-}
-
-int AVSVM_VM::VM::RunHALT()
-{
-	return 0;
-}
 
 bool VM::GetResult(double& dVal)
 {

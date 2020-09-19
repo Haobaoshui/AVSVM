@@ -43,7 +43,9 @@ namespace AVSVM_VM
 
 		void malloc_CS(int new_size);
 		void malloc_DS(int new_size);
-		void malloc_stack(int new_size);
+		void malloc_SS(int new_size);
+		
+	
 
 	
 
@@ -78,8 +80,8 @@ namespace AVSVM_VM
 		///////////////////////////////////////////////////////////////
 		//程序校验
 	public:		
-		bool Check(const char* pstrBytecodesFileName);
-		bool Check();
+		bool Validator(const wstring pstrBytecodesFileName);
+		bool Validator();
 
 
 		///////////////////////////////////////////////////////////////
@@ -87,66 +89,27 @@ namespace AVSVM_VM
 	public:
 		int Run();
 
-	private:
-		//无操作
-		int runNOP();				//无操作
-
-		//加载局部变量
-		int RunLOCALLOAD();		//加载局部变量,后跟局部变量索引
-		int RunLOCALLOAD0();		//加载局部变量0
-		int RunLOCALLOAD1();		//加载局部变量1
-
-		//保存到局部变量
-		int RunLOCALSTORE();		//保存到局部变量,后跟局部变量索引
-		int RunLOCALSTORE0();		//保存到局部变量0
-		int RunLOCALSTORE1();		//保存到局部变量1
-
-		//全局变量加载与保存
-		int RunGLOBALLOAD();		//全局/静态变量
-		int RunGLOBALSTORE();		//全局静态变量
-
-		//栈操作
-		int RunPUSH();			//压栈
-		int RunPOP();				//弹栈
-		int RunDUP();			//复制栈顶
-		int RunSWAP();			//交换栈顶和次栈顶
-
-		int RunADD();			//整数加
-		int RunSUB();			//整数减
-		int RunMUL();			//整数乘
-		int RunDIV();			//整数除
-		int RunMOD();			//整数模
-
-
-		//条件分支指令
-		int RunIFEQ();			//如果相等
-		int RunIFNE();			//如果不等
-
-
-		//对象
-		int RunNEW();			//新建对象
-
-		//函数调用
-		int RunRETURN();			//函数返回
-		int RunCALL();			//函数调用	
-		int RunSYS_CALL();		//系统调用
-		int RunHALT();			//停机
+	
 
 
 
 
 	protected:
-		int PC;		//PC寄存器
-		int BP;		//BP寄存器
-		unsigned int SP;				//SP寄存器
+		uint32_t PC;		//PC寄存器
+		uint32_t BP;		//BP寄存器
+		uint32_t SP;		//SP寄存器
 
 		unsigned char* DS;	//DS，数据区
 		unsigned char* CS;	//CS,存放字节码
-		int m_nCSLength;
-		int m_nDSLength;
+		unsigned char* SS;	//SS,存放函数栈帧
+		
+		uint32_t m_nCSLength;
+		uint32_t m_nDSLength;
+		uint32_t m_nSSLength;
+		
 
-		vector<VMStack> stack;			//栈
-		int m_nStackLength;
+		vector<VMStack> mValueStack;	//值栈
+		
 
 	public:
 		bool GetResult(double& dVal);

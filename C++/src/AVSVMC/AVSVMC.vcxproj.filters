@@ -48,6 +48,9 @@
     <ClCompile Include="TokenValue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\ClassFile\ClassFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CompilerOptions.h">
@@ -78,6 +81,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TokenValue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ISA\instructions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ClassFile\ClassFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
