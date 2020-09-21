@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 namespace AVSVM_ISA
 {
 	typedef unsigned char INSTRUCTIONS;
@@ -56,7 +57,6 @@ namespace AVSVM_ISA
 	const INSTRUCTIONS FLOAT_MUL			= 30;	//浮点数乘
 	const INSTRUCTIONS FLOAT_DIV			= 31;	//浮点数除
 
-	const INSTRUCTIONS FLOAT_DIV			= 32;	//浮点数除
 
 
 	const INSTRUCTIONS INT_2_FLOAT			= 33;	//将栈顶整数类型转换为浮点数类型

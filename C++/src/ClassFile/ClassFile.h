@@ -7,7 +7,7 @@ namespace AVSVM_ClassFile
 {
 
 	//Ä§Êý
-	uint32_t magicNum;
+	const uint32_t magicNum=0;
 
 	
 

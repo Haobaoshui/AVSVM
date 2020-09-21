@@ -65,7 +65,7 @@ int VM::InitVM()
 	return VM_SUCCESS;
 }
 
-void VM::malloc_CS(int new_size)
+void VM::malloc_CS(uint32_t new_size)
 {
 	if (new_size < m_nCSLength)return;
 
@@ -88,7 +88,7 @@ void VM::malloc_CS(int new_size)
 /*
 new_size:DS大小（每个元素大小为sizeof(double)），注意该大小并不是实际内存大小
 */
-void VM::malloc_DS(int new_size)
+void VM::malloc_DS(uint32_t new_size)
 {
 	if (new_size < m_nDSLength)return;
 
@@ -107,7 +107,7 @@ void VM::malloc_DS(int new_size)
 	m_nDSLength = size;
 }
 
-void AVSVM_VM::VM::malloc_SS(int new_size)
+void AVSVM_VM::VM::malloc_SS(uint32_t new_size)
 {
 	if (new_size < m_nSSLength)return;
 
@@ -248,7 +248,7 @@ int VM::Run()
 
 			
 			malloc_SS(BP+SP);
-			stack[SP] = dParameter;
+			SS[SP] = nParameter;
 			SP++;
 			break;
 		case  LOCAL_INT_LOAD_0:		//加载局部变量1
@@ -282,9 +282,8 @@ int VM::Run()
 				dParameter = GetParameterFloatFromCS(PC);
 				PC += sizeof(double);
 
-				if (m_nStackLength < SP + 1)
-					malloc_stack(SP + 1);
-				stack[SP] = dParameter;
+				malloc_SS(BP + SP);
+				SS[SP] = nParameter;			
 				SP++;				
 				break;
 
@@ -302,20 +301,19 @@ int VM::Run()
 				PC++;
 				if (SP >= 0)
 				{
-					if (m_nStackLength < SP + 1)
-						malloc_stack(SP + 1);
+					malloc_SS(BP + SP);
 
-					stack[SP] = stack[SP - 1];
+					SS[SP] = SS[SP - 1];
 					SP++;
 				}
 				break;
 			case  SWAP:			//交换栈顶和次栈顶
 				PC++;
-				if (SP >= 1 && SP < m_nStackLength)
+				if (SP >= 1 && SP < m_nSSLength)
 				{
-					int temp = stack[SP];
-					stack[SP] = stack[SP - 1];
-					stack[SP - 1] = temp;
+					int temp = SS[SP];
+					SS[SP] = SS[SP - 1];
+					SS[SP - 1] = temp;
 				}
 				break;
 
@@ -323,7 +321,7 @@ int VM::Run()
 				PC++;
 				if (SP >= 1)
 				{
-					stack[SP - 2] = stack[SP - 1] + stack[SP - 2];
+					SS[SP - 2] = SS[SP - 1] + SS[SP - 2];
 					SP--;
 				}
 				break;
@@ -332,7 +330,7 @@ int VM::Run()
 				if (SP >= 1)
 				{
 
-					stack[SP - 2] = stack[SP - 2] - stack[SP - 1];
+					SS[SP - 2] = SS[SP - 2] - SS[SP - 1];
 					SP--;
 				}
 				break;
@@ -341,7 +339,7 @@ int VM::Run()
 				if (SP >= 1)
 				{
 
-					stack[SP - 2] = stack[SP - 2] * stack[SP - 1];
+					SS[SP - 2] = SS[SP - 2] * SS[SP - 1];
 					SP--;
 				}
 				break;
@@ -350,7 +348,7 @@ int VM::Run()
 				if (SP >= 1)
 				{
 
-					stack[SP - 2] = stack[SP - 2] / stack[SP - 1];
+					SS[SP - 2] = SS[SP - 2] / SS[SP - 1];
 					SP--;
 				}
 				break;
@@ -366,26 +364,29 @@ int VM::Run()
 
 				//条件分支指令
 			case  IFEQ:			//如果相等
+			{
 				PC++;
 
 				nParameter = GetParameterIntFromCS(PC);
 				PC += 4;
 
-				int nSPValue = stack[SP];
+				int nSPValue = SS[SP];
 				if (nSPValue == 0)
 					PC += nParameter;
+			}
 				break;
 			case  IFNE:			//如果不等
+			{
 				PC++;
 
 				nParameter = GetParameterIntFromCS(PC);
 				PC += 4;
 
-				int nSPValue = stack[SP];
+				int nSPValue = SS[SP];
 				if (nSPValue != 0)
 					PC += nParameter;
+			}
 				break;
-
 
 				//对象
 			case  NEW:		//新建对象
@@ -405,6 +406,7 @@ int VM::Run()
 				注意：函数参数在SYSCALL指令前面
 				*/
 			case  SYS_CALL :		//系统调用
+			{
 				PC++;
 				int n = GetParameterIntFromCS(PC);
 				PC += sizeof(int);
@@ -446,9 +448,9 @@ int VM::Run()
 					//(double x,double y)		
 					//返回xy的值
 				{
-					double dParameter1 = stack[SP--];
-					double dParameter2 = stack[SP];
-					stack[SP] = pow(dParameter2, dParameter1);
+					double dParameter1 = SS[SP--];
+					double dParameter2 = SS[SP];
+					SS[SP] = pow(dParameter2, dParameter1);
 				}
 				break;
 
@@ -485,13 +487,13 @@ int VM::Run()
 				case SYSFUNC_cos:
 					//(double x)			
 					//返回x的余弦cos(x)值,x为弧度
-					stack[SP] = sin(stack[SP]);
+					SS[SP] = sin(SS[SP]);
 					break;
 
 				case SYSFUNC_sin:
 					//(double x)			
 					//返回x的正弦sin(x)值,x为弧度
-					stack[SP] = sin(stack[SP]);
+					SS[SP] = sin(SS[SP]);
 					break;
 
 				case SYSFUNC_tan:
@@ -544,13 +546,14 @@ int VM::Run()
 
 					break;
 				}
+			}
 				break;
 
 				
 				case  HALT :			//停机
-				if (SP == 1)
+			/*	if (SP == 1)
 				{
-					m_dVal = stack[0];
+					m_dVal = SS[0];
 					m_bResult = true;
 					goto engine_success;
 
@@ -558,7 +561,7 @@ int VM::Run()
 				else
 				{
 					goto engine_error_failed;
-				}
+				}*/
 				break;
 
 			default:
@@ -598,7 +601,12 @@ int VM::LoadBytecodes(const wstring strBytecodesFileName/*字节码文件名*/)
 
 
 	//1.打开字节码文件
-	FILE* pFileByteCode = fopen(strBytecodesFileName.c_str(), "rb");
+	FILE* pFileByteCode = nullptr;
+	errno_t err=_wfopen_s(&pFileByteCode,strBytecodesFileName.c_str(), L"rb");
+
+	if (err != 0)
+		return VM_E_FILE_NOTEXIST;
+
 	if (NULL == pFileByteCode)
 		return VM_E_OPEN_FILENAME;
 

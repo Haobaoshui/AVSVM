@@ -3,7 +3,7 @@
 using namespace AVSVM_ISA;
 
 #include <string>
-#include <vector>
+
 using namespace std;
 
 #include "VMStack.h"
@@ -41,9 +41,6 @@ namespace AVSVM_VM
 		//初始化虚拟机
 		int InitVM();
 
-		void malloc_CS(int new_size);
-		void malloc_DS(int new_size);
-		void malloc_SS(int new_size);
 		
 	
 
@@ -101,14 +98,19 @@ namespace AVSVM_VM
 
 		unsigned char* DS;	//DS，数据区
 		unsigned char* CS;	//CS,存放字节码
-		unsigned char* SS;	//SS,存放函数栈帧
+		unsigned char* SS;	//SS,存放栈
 		
 		uint32_t m_nCSLength;
 		uint32_t m_nDSLength;
 		uint32_t m_nSSLength;
+
+
+		void malloc_CS(uint32_t new_size);
+		void malloc_DS(uint32_t new_size);
+		void malloc_SS(uint32_t new_size);
 		
 
-		vector<VMStack> mValueStack;	//值栈
+	
 		
 
 	public:

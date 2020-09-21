@@ -147,7 +147,6 @@
     <ClInclude Include="..\ClassFile\ClassFile.h" />
     <ClInclude Include="..\ISA\instructions.h" />
     <ClInclude Include="VM.h" />
-    <ClInclude Include="VMStack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

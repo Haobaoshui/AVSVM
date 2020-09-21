@@ -3,8 +3,8 @@
 
 using namespace AVSVM_Compiler;
 
-#include "../ByteCode/ClassFile.h"
-
+#include "..\ClassFile\ClassFile.h"
+using namespace AVSVM_ClassFile;
 
 ParseTree::ParseTree( )
 {

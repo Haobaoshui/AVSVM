@@ -29,9 +29,6 @@
     <ClInclude Include="VM.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="VMStack.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\ISA\instructions.h">
       <Filter>头文件</Filter>
     </ClInclude>
